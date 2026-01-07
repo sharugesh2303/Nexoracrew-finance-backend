@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 
-// ======================
+// =====================
 // LOAD ENV
 // ======================
 dotenv.config();
