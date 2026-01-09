@@ -26,6 +26,8 @@ app.use(
     credentials: true,
   })
 );
+// Enable Preflight for all routes
+app.options('*', cors());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -63,6 +65,8 @@ app.get("/", (req, res) => {
 // ======================
 // MONGODB CONNECTION & SERVER START
 // ======================
+
+
 const startServer = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
@@ -70,11 +74,13 @@ const startServer = async () => {
     });
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
 
-    // START SERVER ONLY AFTER DB CONNECTION
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`🚀 Backend running locally on port ${PORT}`);
-    });
+    // START SERVER ONLY IF NOT ON VERCEL (Local Development)
+    if (process.env.NODE_ENV !== 'production') {
+      const PORT = process.env.PORT || 5000;
+      app.listen(PORT, () => {
+        console.log(`🚀 Backend running locally on port ${PORT}`);
+      });
+    }
   } catch (error) {
     console.error("❌ MongoDB Connection Failed:", error.message);
     process.exit(1);
@@ -82,3 +88,6 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Vercel requires exporting the app
+export default app;
