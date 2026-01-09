@@ -18,7 +18,11 @@ const app = express();
 // ======================
 app.use(
   cors({
-    origin: "*", // you can restrict later
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://nexoracrew-finance.vercel.app",
+    ],
     credentials: true,
   })
 );
